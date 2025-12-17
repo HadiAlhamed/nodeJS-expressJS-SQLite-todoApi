@@ -6,7 +6,7 @@ const db = new DatabaseSync(':memory:');
 
 db.exec(
   `
-    CREATE TABLE IF NOT EXISTS user(
+    CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username UNIQUE TEXT NOT NULL,
         password TEXT NOT NULL,
@@ -22,7 +22,7 @@ db.exec(
             user_id INTEGER,
             task TEXT NOT NULL,
             completed BOOLEAN DEFAULT 0,
-            FOREIGN KEY(user_id) REFERENCES user(id)
+            FOREIGN KEY(user_id) REFERENCES users(id)
         )
     `
 );
