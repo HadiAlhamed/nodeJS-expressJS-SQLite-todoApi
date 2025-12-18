@@ -2,7 +2,6 @@ import express from 'express';
 import {
   getAllTodos,
   createTodo,
-  getTodo,
   updateTodo,
   deleteTodo,
 } from '../controllers/todo-controller.js';
@@ -14,9 +13,6 @@ router.get('/', getAllTodos);
 
 //Create new todo
 router.post('/', createTodo);
-
-//get specific todo by id
-router.get('/:id', getTodo);
 
 //update todo by id
 router.put('/:id', updateTodo);

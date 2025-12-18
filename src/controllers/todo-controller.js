@@ -49,7 +49,7 @@ export const updateTodo = async (req, res) => {
   `;
   try {
     const updateTask = db.prepare(updateTaskQuery);
-    const result = updateTask.run(task, completed, taskId);
+    updateTask.run(task, completed, taskId);
     res.status(StatusCodes.OK).json({ message: 'Task updated successfully' });
   } catch (error) {
     console.error('Error updating task:', error);
