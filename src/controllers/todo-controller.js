@@ -39,8 +39,24 @@ export const createTodo = async (req, res) => {
   }
 };
 
-export const getTodo = async (req, res) => {};
-
-export const updateTodo = async (req, res) => {};
+export const updateTodo = async (req, res) => {
+  const taskId = req.params.id;
+  const { task, completed } = req.body;
+  const updateTaskQuery = `
+    UPDATE todos
+    SET task = ?, completed = ?
+    WHERE id = ?
+  `;
+  try {
+    const updateTask = db.prepare(updateTaskQuery);
+    const result = updateTask.run(task, completed, taskId);
+    res.status(StatusCodes.OK).json({ message: 'Task updated successfully' });
+  } catch (error) {
+    console.error('Error updating task:', error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal server error' });
+  }
+};
 
 export const deleteTodo = async (req, res) => {};
