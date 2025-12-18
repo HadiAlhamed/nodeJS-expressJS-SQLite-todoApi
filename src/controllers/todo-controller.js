@@ -59,4 +59,20 @@ export const updateTodo = async (req, res) => {
   }
 };
 
-export const deleteTodo = async (req, res) => {};
+export const deleteTodo = async (req, res) => {
+  const taskId = req.params.id;
+  const deleteTaskQuery = `
+  DELETE FROM todos
+  WHERE id = ?
+  `;
+  try {
+    const deleteTask = db.prepare(deleteTaskQuery);
+    deleteTask.run(taskId);
+    res.status(StatusCodes.OK).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting task:', error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal server error' });
+  }
+};
