@@ -19,7 +19,7 @@ db.exec(
   `
         CREATE TABLE IF NOT EXISTS todos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            user_id INTEGER NOT NULL,
             task TEXT NOT NULL,
             completed BOOLEAN DEFAULT 0,
             FOREIGN KEY(user_id) REFERENCES users(id)
