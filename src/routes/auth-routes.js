@@ -2,11 +2,11 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../db.js';
-
+import { register, login } from '../controllers/auth-controllers.js';
 const router = express.Router();
 
-router.post('/login', (req, res) => {});
+router.post('/register', register);
 
-router.post('/register', (req, res) => {});
+router.post('/login', login);
 
 export default router;

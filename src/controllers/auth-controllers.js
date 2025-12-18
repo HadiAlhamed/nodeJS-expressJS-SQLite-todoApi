@@ -33,13 +33,54 @@ const register = async (req, res) => {
     );
     res.status(StatusCodes.CREATED).json({ token });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: 'Server error' });
   }
 };
 
-const login = (req, res) => {};
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const getUserQuery = `
+      SELECT * FROM users 
+      WHERE username = ?
+    `;
+    const getUser = db.prepare(getUserQuery);
+    const user = getUser.get(username);
+
+    //check username
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: `user with username ${username} does not exist` });
+    }
+
+    //check password
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ message: 'Invalid password ' });
+    }
+
+    //generate JWT token
+    const token = await jwt.sign(
+      {
+        id: user.id,
+        username: username,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    return res.status(StatusCodes.OK).json({ token });
+  } catch (err) {
+    console.log(err.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Server error' });
+  }
+};
 
 export { register, login };
